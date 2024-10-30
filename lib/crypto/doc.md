@@ -2,7 +2,7 @@
 --
     import "github.com/go-i2p/go-i2p/lib/crypto"
 
-package for i2p specific cryptography
+package for i2p specific crpytography
 
 ## Usage
 
@@ -12,72 +12,7 @@ const (
 	OPAD = byte(0x5C)
 )
 ```
-#### type AESSymmetricKey
-```go
-type AESSymmetricKey struct {
-    Key []byte // AES key (must be 16, 24, or 32 bytes for AES-128, AES-192, AES-256)
-    IV  []byte // Initialization Vector (must be 16 bytes for AES)
-}
-```
 
-AESSymmetricKey represents a symmetric key for AES encryption/decryption
-
-#### func (AESSymmetricKey) NewEncrypter
-
-```go
-func (k *AESSymmetricKey) NewEncrypter() (Encrypter, error)
-```
-NewEncrypter creates a new AESSymmetricEncrypter
-
-#### func (AESSymmetricKey) NewDecrypter
-
-```go
-func (k *AESSymmetricKey) NewDecrypter() (Decrypter, error)
-```
-NewDecrypter creates a new AESSymmetricDecrypter
-
-#### func (AESSymmetricKey) Len
-
-```go
-func (k *AESSymmetricKey) Len() int
-```
-Len returns the length of the key
-
-#### type AESSymmetricEncrypter
-
-```go
-type AESSymmetricEncrypter struct {
-    Key []byte
-    IV  []byte
-}
-```
-
-AESSymmetricEncrypter implements the Encrypter interface using AES
-
-#### func (*AESSymmetricEncrypter) Encrypt
-
-```go
-func (e *AESSymmetricEncrypter) Encrypt(data []byte) ([]byte, error)
-```
-Encrypt encrypts data using AES-CBC with PKCS#7 padding
-
-#### type AESSymmetricDecrypter
-
-```go
-type AESSymmetricDecrypter struct {
-    Key []byte
-    IV  []byte
-}
-```
-
-AESSymmetricDecrypter implements the Decrypter interface using AES
-
-#### func (*AESSymmetricDecrypter) Decrypt
-
-```go
-func (d *AESSymmetricDecrypter) Decrypt(data []byte) ([]byte, error)
-```
-Decrypt decrypts data using AES-CBC with PKCS#7 padding
 ```go
 var (
 	ElgDecryptFail   = errors.New("failed to decrypt elgamal encrypted data")
@@ -94,6 +29,10 @@ var (
 ```
 
 ```go
+var Curve25519EncryptTooBig = errors.New("failed to encrypt data, too big for Curve25519")
+```
+
+```go
 var Ed25519EncryptTooBig = errors.New("failed to encrypt data, too big for Ed25519")
 ```
 
@@ -107,6 +46,180 @@ var SHA256 = sha256.Sum256
 func ElgamalGenerate(priv *elgamal.PrivateKey, rand io.Reader) (err error)
 ```
 generate an elgamal key pair
+
+#### type AESSymmetricDecrypter
+
+```go
+type AESSymmetricDecrypter struct {
+	Key []byte
+	IV  []byte
+}
+```
+
+AESSymmetricDecrypter implements the Decrypter interface using AES
+
+#### func (*AESSymmetricDecrypter) Decrypt
+
+```go
+func (d *AESSymmetricDecrypter) Decrypt(data []byte) ([]byte, error)
+```
+Decrypt decrypts data using AES-CBC with PKCS#7 padding
+
+#### func (*AESSymmetricDecrypter) DecryptNoPadding
+
+```go
+func (d *AESSymmetricDecrypter) DecryptNoPadding(data []byte) ([]byte, error)
+```
+DecryptNoPadding decrypts data using AES-CBC without padding
+
+#### type AESSymmetricEncrypter
+
+```go
+type AESSymmetricEncrypter struct {
+	Key []byte
+	IV  []byte
+}
+```
+
+AESSymmetricEncrypter implements the Encrypter interface using AES
+
+#### func (*AESSymmetricEncrypter) Encrypt
+
+```go
+func (e *AESSymmetricEncrypter) Encrypt(data []byte) ([]byte, error)
+```
+Encrypt encrypts data using AES-CBC with PKCS#7 padding
+
+#### func (*AESSymmetricEncrypter) EncryptNoPadding
+
+```go
+func (e *AESSymmetricEncrypter) EncryptNoPadding(data []byte) ([]byte, error)
+```
+EncryptNoPadding encrypts data using AES-CBC without padding
+
+#### type AESSymmetricKey
+
+```go
+type AESSymmetricKey struct {
+	Key []byte // AES key (must be 16, 24, or 32 bytes for AES-128, AES-192, AES-256)
+	IV  []byte // Initialization Vector (must be 16 bytes for AES)
+}
+```
+
+AESSymmetricKey represents a symmetric key for AES encryption/decryption
+
+#### func (*AESSymmetricKey) Len
+
+```go
+func (k *AESSymmetricKey) Len() int
+```
+Len returns the length of the key
+
+#### func (*AESSymmetricKey) NewDecrypter
+
+```go
+func (k *AESSymmetricKey) NewDecrypter() (Decrypter, error)
+```
+NewDecrypter creates a new AESSymmetricDecrypter
+
+#### func (*AESSymmetricKey) NewEncrypter
+
+```go
+func (k *AESSymmetricKey) NewEncrypter() (Encrypter, error)
+```
+NewEncrypter creates a new AESSymmetricEncrypter
+
+#### type Curve25519Encryption
+
+```go
+type Curve25519Encryption struct {
+}
+```
+
+
+#### func (*Curve25519Encryption) Encrypt
+
+```go
+func (curve25519 *Curve25519Encryption) Encrypt(data []byte) (enc []byte, err error)
+```
+
+#### func (*Curve25519Encryption) EncryptPadding
+
+```go
+func (curve25519 *Curve25519Encryption) EncryptPadding(data []byte, zeroPadding bool) (encrypted []byte, err error)
+```
+
+#### type Curve25519PrivateKey
+
+```go
+type Curve25519PrivateKey curve25519.PrivateKey
+```
+
+
+#### type Curve25519PublicKey
+
+```go
+type Curve25519PublicKey []byte
+```
+
+
+#### func (Curve25519PublicKey) Len
+
+```go
+func (k Curve25519PublicKey) Len() int
+```
+
+#### func (Curve25519PublicKey) NewEncrypter
+
+```go
+func (elg Curve25519PublicKey) NewEncrypter() (enc Encrypter, err error)
+```
+
+#### func (Curve25519PublicKey) NewVerifier
+
+```go
+func (k Curve25519PublicKey) NewVerifier() (v Verifier, err error)
+```
+
+#### type Curve25519Signer
+
+```go
+type Curve25519Signer struct {
+}
+```
+
+
+#### func (*Curve25519Signer) Sign
+
+```go
+func (s *Curve25519Signer) Sign(data []byte) (sig []byte, err error)
+```
+
+#### func (*Curve25519Signer) SignHash
+
+```go
+func (s *Curve25519Signer) SignHash(h []byte) (sig []byte, err error)
+```
+
+#### type Curve25519Verifier
+
+```go
+type Curve25519Verifier struct {
+}
+```
+
+
+#### func (*Curve25519Verifier) Verify
+
+```go
+func (v *Curve25519Verifier) Verify(data, sig []byte) (err error)
+```
+
+#### func (*Curve25519Verifier) VerifyHash
+
+```go
+func (v *Curve25519Verifier) VerifyHash(h, sig []byte) (err error)
+```
 
 #### type DSAPrivateKey
 

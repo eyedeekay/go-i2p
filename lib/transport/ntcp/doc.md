@@ -7,11 +7,42 @@
 
 ```go
 const (
+	NOISE_DH_CURVE25519 = 1
+
+	NOISE_CIPHER_CHACHAPOLY = 1
+	NOISE_CIPHER_AESGCM     = 2
+
+	NOISE_HASH_SHA256 = 3
+
+	NOISE_PATTERN_XK = 11
+
+	MaxPayloadSize = math.MaxUint16 - 16 - uint16Size /*data len*/
+)
+```
+
+```go
+const (
 	NTCP_PROTOCOL_VERSION = 2
 	NTCP_PROTOCOL_NAME    = "NTCP2"
 	NTCP_MESSAGE_MAX_SIZE = 65537
 )
 ```
+
+#### func  DeobfuscateEphemeralKey
+
+```go
+func DeobfuscateEphemeralKey(message []byte, aesKey *crypto.AESSymmetricKey) ([]byte, error)
+```
+DeobfuscateEphemeralKey decrypts the ephemeral public key in the message using
+AES-256-CBC without padding
+
+#### func  ObfuscateEphemeralKey
+
+```go
+func ObfuscateEphemeralKey(message []byte, aesKey *crypto.AESSymmetricKey) ([]byte, error)
+```
+ObfuscateEphemeralKey encrypts the ephemeral public key in the message using
+AES-256-CBC without padding
 
 #### type Session
 

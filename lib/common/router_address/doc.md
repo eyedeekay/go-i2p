@@ -44,6 +44,12 @@ func (router_address RouterAddress) Bytes() []byte
 ```
 Bytes returns the router address as a []byte.
 
+#### func (RouterAddress) CapsString
+
+```go
+func (router_address RouterAddress) CapsString() I2PString
+```
+
 #### func (RouterAddress) Cost
 
 ```go
@@ -76,6 +82,13 @@ func (router_address RouterAddress) Host() (net.Addr, error)
 ```go
 func (router_address RouterAddress) HostString() I2PString
 ```
+
+#### func (*RouterAddress) IPVersion
+
+```go
+func (router_address *RouterAddress) IPVersion() string
+```
+IPVersion returns a string "4" for IPv4 or 6 for IPv6
 
 #### func (RouterAddress) InitializationVector
 
@@ -112,7 +125,7 @@ func (router_address RouterAddress) IntroducerTagString(num int) I2PString
 ```go
 func (router_address *RouterAddress) Network() string
 ```
-Network implements net.Addr. It returns the transport type
+Network implements net.Addr. It returns the transport type plus 4 or 6
 
 #### func (RouterAddress) Options
 

@@ -57,6 +57,13 @@ func (router_info *RouterInfo) IdentHash() Hash
 ```
 IndentHash returns the identity hash (sha256 sum) for this RouterInfo.
 
+#### func (RouterInfo) Network
+
+```go
+func (router_info RouterInfo) Network() string
+```
+Network implements net.Addr
+
 #### func (RouterInfo) Options
 
 ```go

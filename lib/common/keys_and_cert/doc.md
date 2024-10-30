@@ -64,3 +64,22 @@ PublicKey returns the public key as a crypto.PublicKey.
 func (keys_and_cert *KeysAndCert) SigningPublicKey() (signing_public_key crypto.SigningPublicKey)
 ```
 SigningPublicKey returns the signing public key.
+
+#### type PrivateKeysAndCert
+
+```go
+type PrivateKeysAndCert struct {
+	KeysAndCert
+	PK_KEY  crypto.PrivateKey
+	SPK_KEY crypto.PrivateKey
+}
+```
+
+PrivateKeysAndCert contains a KeysAndCert along with the corresponding private
+keys for the Public Key and the Signing Public Key
+
+#### func  NewPrivateKeysAndCert
+
+```go
+func NewPrivateKeysAndCert() (*PrivateKeysAndCert, error)
+```
